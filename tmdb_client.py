@@ -30,7 +30,8 @@ def get_movies_list(list_type):
 def get_movies(how_many, list_type):
     data = get_movies_list(list_type)
     data = data["results"]
-    random.shuffle(data)
+    if list_type == "now_playing":
+        random.shuffle(data)
     return data[:how_many]
 
 
