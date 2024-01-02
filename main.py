@@ -9,9 +9,9 @@ def homepage():
     butts = ["top_rated", "now_playing", "upcoming", "popular"]
     current_list = request.args.get("list_type")
     if current_list not in butts:
-        movies = tmdb_client.get_movies(how_many=8, list_type="popular")
-    else:
-        movies = tmdb_client.get_movies(how_many=8, list_type=current_list)
+        current_list = "popular"
+
+    movies = tmdb_client.get_movies(how_many=8, list_type=current_list)
 
     return render_template(
         "homepage.html", movies=movies, butts=butts, current_list=current_list
