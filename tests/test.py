@@ -1,4 +1,3 @@
-# zad14.3 400 kurde no nie wiem jak to zrobić
 from main import app
 from unittest.mock import Mock
 import pytest
