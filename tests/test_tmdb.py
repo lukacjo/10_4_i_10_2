@@ -5,32 +5,28 @@ import main, tmdb_client
 from unittest.mock import Mock
 
 
+def perform_api_test(monkeypatch, api_function, mock_input, expected_output):
+    with monkeypatch.context() as m:
+        requests_mock = Mock()
+        response = requests_mock.return_value
+        response.json.return_value = mock_input
+        m.setattr("tmdb_client.requests.get", requests_mock)
+
+        result = api_function(mock_input)
+
+    assert result == expected_output
+
+
 def test_get_single_movie(monkeypatch):
-    mock_movie_id = ["Movie 1"]
-
-    requests_mock = Mock()
-    # wynik wywoołania zapytania do API
-    response = requests_mock.return_value
-    # przysłaniamy wynik wywołania metody .json()
-    response.json.return_value = mock_movie_id
-    monkeypatch.setattr("tmdb_client.requests.get", requests_mock)
-
-    movie_id = tmdb_client.get_single_movie(mock_movie_id)
-    assert movie_id == mock_movie_id
+    mock_movie_data = ["Movie 1"]
+    perform_api_test(
+        monkeypatch, tmdb_client.get_single_movie, mock_movie_data, mock_movie_data
+    )
 
 
 def test_get_movie_images(monkeypatch):
-    mock_image = ["Movie 1"]
-
-    requests_mock = Mock()
-
-    response = requests_mock.return_value
-
-    response.json.return_value = mock_image
-    monkeypatch.setattr("tmdb_client.requests.get", requests_mock)
-
-    image = tmdb_client.get_movie_images(mock_image)
-    assert image == mock_image
+    mock_image = ["Image 1"]
+    perform_api_test(monkeypatch, tmdb_client.get_movie_images, mock_image, mock_image)
 
 
 def test_get_single_movie_cast(monkeypatch):
